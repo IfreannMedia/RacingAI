@@ -80,7 +80,7 @@ public class Drive : MonoBehaviour
         }
 
         //left 45
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(45, Vector3.up) * -transform.forward, out hit, visibleDistance))
+        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(45, Vector3.up) * -transform.right, out hit, visibleDistance))
         {
             l45Dist = 1 - Round(hit.distance / visibleDistance);
         }
