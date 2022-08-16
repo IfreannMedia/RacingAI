@@ -122,6 +122,7 @@ public class ANNDrive : MonoBehaviour
             }
         }
         trainingDone = true;
+        SaveWeightsToFile();
     }
 
     float Map(float newFrom, float newTo, float origFrom, float origTo, float value)
