@@ -98,7 +98,12 @@ public class Drive : MonoBehaviour
 
         // write training data to file
         // only write unique values to data
-        if (!collectedTrainingData.Contains(td))
-            collectedTrainingData.Add(td);
+        if (translationInput != 0 && rotationInput != 0)
+        {
+            if (!collectedTrainingData.Contains(td))
+            {
+                collectedTrainingData.Add(td);
+            }
+        }
     }
 }
