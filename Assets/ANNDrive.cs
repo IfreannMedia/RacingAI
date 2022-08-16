@@ -143,10 +143,63 @@ public class ANNDrive : MonoBehaviour
         /*
         //left 45
         Quaternion.AngleAxis(45, Vector3.up) * -this.transform.right;
+    void Update() {
+        if(!trainingDone) return;
+
+        List<double> calcOutputs = new List<double>();
+        List<double> inputs = new List<double>();
+        List<double> outputs = new List<double>();
+
+        //raycasts
+        RaycastHit hit;
+        float fDist = 0, rDist = 0, lDist = 0, r45Dist = 0, l45Dist = 0;
+
+        //forward
+        if (Physics.Raycast(transform.position, this.transform.forward, out hit, visibleDistance))
+        {
+            fDist = 1-Round(hit.distance/visibleDistance);
+        }
+
+        //right
+        if (Physics.Raycast(transform.position, this.transform.right, out hit, visibleDistance))
+        {
+            rDist = 1-Round(hit.distance/visibleDistance);
+        }
+
+        //left
+        if (Physics.Raycast(transform.position, -this.transform.right, out hit, visibleDistance))
+        {
+            lDist = 1-Round(hit.distance/visibleDistance);
+        }
 
         //right 45
-        Quaternion.AngleAxis(-45, Vector3.up) * this.transform.right;
-         */
-    }
+        if (Physics.Raycast(transform.position, 
+                            Quaternion.AngleAxis(-45, Vector3.up) * this.transform.right, out hit, visibleDistance))
+        {
+            r45Dist = 1-Round(hit.distance/visibleDistance);
+        }
 
+        //left 45
+        if (Physics.Raycast(transform.position, 
+                            Quaternion.AngleAxis(45, Vector3.up) * -this.transform.right, out hit, visibleDistance))
+        {
+            l45Dist = 1-Round(hit.distance/visibleDistance);
+        }
+
+        inputs.Add(fDist);
+        inputs.Add(rDist);
+        inputs.Add(lDist);
+        inputs.Add(r45Dist);
+        inputs.Add(l45Dist);
+        outputs.Add(0);
+        outputs.Add(0);
+        calcOutputs = ann.CalcOutput(inputs,outputs);
+        float translationInput = Map(-1,1,0,1,(float) calcOutputs[0]);
+        float rotationInput = Map(-1,1,0,1,(float) calcOutputs[1]);
+        translation = translationInput * speed * Time.deltaTime;
+        rotation = rotationInput * rotationSpeed * Time.deltaTime;
+        this.transform.Translate(0, 0, translation);
+        this.transform.Rotate(0, rotation, 0);        
+
+    }
 }
