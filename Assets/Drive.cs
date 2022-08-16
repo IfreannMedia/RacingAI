@@ -48,42 +48,50 @@ public class Drive : MonoBehaviour
         // Rotate around our y-axis
         transform.Rotate(0, rotation, 0);
 
-        Debug.DrawRay(transform.position, transform.forward * visibleDistance, Color.red);
-        Debug.DrawRay(transform.position, transform.right * visibleDistance, Color.red);
+        Debug.DrawRay(transform.position, this.transform.forward * visibleDistance, Color.red);
+        Debug.DrawRay(transform.position, this.transform.right * visibleDistance, Color.red);
+        Debug.DrawRay(transform.position, -this.transform.right * visibleDistance, Color.red);
+        //look left
+        Debug.DrawRay(transform.position, Quaternion.AngleAxis(45, Vector3.up) * -this.transform.right * visibleDistance, Color.green);
+        //look right
+        Debug.DrawRay(transform.position, Quaternion.AngleAxis(-45, Vector3.up) * this.transform.right * visibleDistance, Color.green);
 
         // Raycasts
         RaycastHit hit;
-        float fDist = 0, rDist = 0, lDist = 0, r45Dist = 0, l45Dist = 0;
+        float fDist = 0, rDist = 0, 
+                      lDist = 0, r45Dist = 0, l45Dist = 0; 
 
-        // forward
-        if (Physics.Raycast(transform.position, transform.forward, out hit, visibleDistance))
+        //forward
+        if (Physics.Raycast(transform.position, this.transform.forward, out hit, visibleDistance))
         {
-            fDist = 1 - Round(hit.distance / visibleDistance);
-        }
+            fDist = 1 - Round(hit.distance/visibleDistance);
+        }  
 
         //right
-        if (Physics.Raycast(transform.position, transform.right, out hit, visibleDistance))
+        if (Physics.Raycast(transform.position, this.transform.right, out hit, visibleDistance))
         {
-            rDist = 1 - Round(hit.distance / visibleDistance);
+            rDist = 1 - Round(hit.distance/visibleDistance);
         }
 
         //left
-        if (Physics.Raycast(transform.position, -transform.right, out hit, visibleDistance))
+        if (Physics.Raycast(transform.position, -this.transform.right, out hit, visibleDistance))
         {
-            lDist = 1 - Round(hit.distance / visibleDistance);
+            lDist = 1 - Round(hit.distance/visibleDistance);
         }
 
         //right 45
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.right, out hit, visibleDistance))
-        {
-            r45Dist = 1 - Round(hit.distance / visibleDistance);
-        }
+		if (Physics.Raycast(transform.position, 
+			                Quaternion.AngleAxis(-45, Vector3.up) * this.transform.right, out hit, visibleDistance))
+		{
+            r45Dist = 1 - Round(hit.distance/visibleDistance);
+		}
 
         //left 45
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(45, Vector3.up) * -transform.right, out hit, visibleDistance))
+        if (Physics.Raycast(transform.position, 
+        	                Quaternion.AngleAxis(45, Vector3.up) * -this.transform.right, out hit, visibleDistance))
         {
-            l45Dist = 1 - Round(hit.distance / visibleDistance);
-        }
+            l45Dist = 1 - Round(hit.distance/visibleDistance);
+        }  
 
         string td = fDist + "," + rDist + "," + lDist + "," +
             r45Dist + "," + l45Dist + "," + Round(translationInput) + "," + Round(rotationInput);
