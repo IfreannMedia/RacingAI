@@ -21,10 +21,40 @@ public class ANNDrive : MonoBehaviour
     public float translation;
     public float rotation;
 
+    public bool loadFromFile;
+
     void Start()
     {
         ann = new ANN(5, 2, 1, 10, 0.5);
-        StartCoroutine(LoadTrainingSet());
+        if (loadFromFile)
+        {
+            LoadWeightsFromFile();
+            trainingDone = true;
+        }
+        else
+        {
+            StartCoroutine(LoadTrainingSet());
+        }
+    }
+
+    private void SaveWeightsToFile()
+    {
+        string path = Application.dataPath + "/weights.txt";
+        StreamWriter wf = File.CreateText(path);
+        wf.WriteLine(ann.PrintWeights());
+        wf.Close();
+    }
+
+    private void LoadWeightsFromFile()
+    {
+        string path = Application.dataPath + "/weights.txt";
+        StreamReader wf = File.OpenText(path);
+        if(File.Exists(path))
+        {
+            string line = wf.ReadLine();
+            ann.LoadWeights(line);
+        }
+
     }
 
     private void OnGUI()
