@@ -139,11 +139,6 @@ public class ANNDrive : MonoBehaviour
         return (float)System.Math.Round(x, System.MidpointRounding.AwayFromZero) / 2.0f;
     }
 
-    private void Update()
-    {
-        /*
-        //left 45
-        Quaternion.AngleAxis(45, Vector3.up) * -this.transform.right;
     void Update() {
         if(!trainingDone) return;
 
